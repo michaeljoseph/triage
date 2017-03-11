@@ -1,20 +1,21 @@
 class GithubIssuesRepository(object):
-    items = []
+    issues = []
 
     def __init__(self, items):
-        self.items = items
+        self.issues = items
 
     def update(self, item):
         new_items = []
-        for old_item in self.items:
+        for old_item in self.issues:
             if item['id'] == old_item['id']:
                 new_items.append(item)
             else:
                 new_items.append(old_item)
-        self.items = new_items
+        self.issues = new_items
 
 
 class TriageWorkflow(object):
+    """Workflow class configured with filtering."""
     repository = None
     actions = []
 
@@ -26,8 +27,9 @@ class TriageWorkflow(object):
         ]
 
     @property
-    def items(self):
-        return self.repository.items
+    def issues(self):
+        # TODO: apply filters
+        return self.repository.issues
 
     def process(self, responses):
         for item, label in responses:
@@ -47,12 +49,15 @@ class CLIPresenter(object):
     def run(self):
         prompt = ','.join(self.workflow.actions) + ' '
 
-        for item in self.workflow.items:
-            print(item)
+        for issue in self.workflow.issues:
+            print(issue)
             answer = input(prompt)
             self.responses.append(
-                [item, answer]
+                [issue, answer]
             )
+        print('\n%s' % self.responses)
+        self.workflow.process(self.responses)
+        print('\nnew items:\n%s' % self.workflow.repository.issues)
 
 
 def main():
@@ -64,18 +69,16 @@ def main():
         }
     ]
 
+    # FIXME: advertise the configuration it requires
     repo = GithubIssuesRepository(issues)
 
+    # FIXME: workflow should self-configure
     workflow = TriageWorkflow(repo)
 
+    # this is the application
     ui = CLIPresenter(workflow)
-
     ui.run()
 
-    print('\n%s' % ui.responses)
-
-    workflow.process(ui.responses)
-    print('\nnew items:\n%s' % workflow.repository.items)
 
 if __name__ == '__main__':
     main()
