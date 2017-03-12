@@ -7,6 +7,7 @@
 - TriageWorkflow
     - find_issues
         - (defines) filters (which issues to find)
+        - associates issues with actions
     - process_issues
         - (defines) actions (against issues)
 
