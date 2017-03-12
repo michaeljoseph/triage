@@ -22,3 +22,9 @@ class Workflow(object):
                 (issue, self.ACTIONS)
             )
         return issues_and_actions
+
+    def process_issues(self, issue_actions):
+        for issue_action in issue_actions:
+            issue_id = issue_action['id']
+            label = issue_action['action']['value']
+            self.repository.update_issue(issue_id, [label])

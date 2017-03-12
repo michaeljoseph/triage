@@ -3,3 +3,6 @@ class Repository(object):
 
     def search(self):
         return self.issues
+
+    def update_issue(self, issue_id, labels):
+        pass
