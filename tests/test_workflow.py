@@ -9,7 +9,8 @@ def test_unconfigured_workflow_raises():
         workflow.find_issues()
 
 
-def test_issues_are_associated_with_actions(mocker):
+@pytest.fixture
+def repository_with_issues():
     repository = Repository()
     repository.issues = [
         {
@@ -19,8 +20,11 @@ def test_issues_are_associated_with_actions(mocker):
             'tags': [],
         }
     ]
+    return repository
 
-    workflow = Workflow(repository)
+
+def test_issues_are_associated_with_actions(repository_with_issues):
+    workflow = Workflow(repository_with_issues)
     issues = workflow.find_issues()
 
     assert len(issues) > 0
@@ -29,3 +33,4 @@ def test_issues_are_associated_with_actions(mocker):
         assert isinstance(actions, list)
         for action in actions:
             assert action in Workflow.ACTIONS
+
