@@ -1,3 +1,5 @@
+from .exceptions import ConfigurationException
+
 
 class Workflow(object):
     ACTIONS = [
@@ -10,7 +12,7 @@ class Workflow(object):
 
     def find_issues(self):
         if not self.repository:
-            raise Exception()
+            raise ConfigurationException()
 
         issues_and_actions = []
 

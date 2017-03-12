@@ -1,11 +1,13 @@
-from triage import Workflow, Repository
+from triage.workflow import Workflow
+from triage.repository import Repository
+from triage.exceptions import ConfigurationException
 
 import pytest
 
 
 def test_unconfigured_workflow_raises():
     workflow = Workflow()
-    with pytest.raises(Exception):
+    with pytest.raises(ConfigurationException):
         workflow.find_issues()
 
 
@@ -33,4 +35,3 @@ def test_issues_are_associated_with_actions(repository_with_issues):
         assert isinstance(actions, list)
         for action in actions:
             assert action in Workflow.ACTIONS
-
