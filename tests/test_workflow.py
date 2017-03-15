@@ -36,9 +36,8 @@ def workflow_with_issues(repository_with_issues):
     return Workflow(repository_with_issues)
 
 
-def test_issues_are_associated_with_actions(repository_with_issues):
-    workflow = Workflow(repository_with_issues)
-    issues = workflow.find_issues()
+def test_issues_are_associated_with_actions(workflow_with_issues):
+    issues = workflow_with_issues.find_issues()
 
     assert len(issues) > 0
 
