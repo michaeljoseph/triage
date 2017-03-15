@@ -1,10 +1,11 @@
 from .exceptions import ConfigurationException
+from .actions import AddIssueLabelAction, CloseIssueAction
 
 
 class Workflow(object):
     ACTIONS = [
-        'Label',
-        'Close',
+        AddIssueLabelAction,
+        CloseIssueAction,
     ]
 
     def __init__(self, repository=None):
