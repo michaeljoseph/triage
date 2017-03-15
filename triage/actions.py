@@ -1,10 +1,18 @@
 class Action(object):
+    name = None
+
+
+class IssueAction(Action):
     pass
 
 
-class AddIssueLabelAction(Action):
-    NAME = 'Label'
+class LabelIssue(IssueAction):
+    name = 'Label'
 
 
-class CloseIssueAction(Action):
-    NAME = 'Close'
+class CloseIssue(IssueAction):
+    name = 'Close'
+
+
+class LabelAndCloseIssue(LabelIssue, CloseIssue):
+    name = 'Label and close'

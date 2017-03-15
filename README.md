@@ -25,3 +25,7 @@
 
 boolean, string, number
 array, enum, object
+
+## Action (object)
++ name: (string) - The name of the action
+

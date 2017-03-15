@@ -5,4 +5,4 @@ class Repository(object):
         return self.issues
 
     def update_issue(self, issue_id, labels):
-        raise NotImplemented
+        raise NotImplementedError

@@ -1,11 +1,13 @@
 from .exceptions import ConfigurationException
-from .actions import AddIssueLabelAction, CloseIssueAction
+from . import actions
+from .issue import Issue
 
 
 class Workflow(object):
     ACTIONS = [
-        AddIssueLabelAction,
-        CloseIssueAction,
+        actions.LabelIssue(),
+        actions.CloseIssue(),
+        actions.LabelAndCloseIssue(),
     ]
 
     def __init__(self, repository=None):
@@ -20,7 +22,7 @@ class Workflow(object):
         issues = self.repository.search()
         for issue in issues:
             issues_and_actions.append(
-                (issue, self.ACTIONS)
+                (Issue.from_dict(issue), self.ACTIONS)
             )
         return issues_and_actions
 
