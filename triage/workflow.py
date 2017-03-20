@@ -3,12 +3,16 @@ from . import actions
 from .issue import Issue
 
 
-class Workflow(object):
+class TriageWorkflow(object):
     ACTIONS = [
         actions.LabelIssue(),
         actions.CloseIssue(),
         actions.LabelAndCloseIssue(),
     ]
+    FILTERS = {
+        'state': 'open',
+        'labels': [],
+    }
 
     def __init__(self, repository=None):
         self.repository = repository
@@ -19,7 +23,8 @@ class Workflow(object):
 
         issues_and_actions = []
 
-        issues = self.repository.search()
+        issues = self.repository.read_issues(self.FILTERS)
+
         for issue in issues:
             issues_and_actions.append(
                 (Issue.from_dict(issue), self.ACTIONS)
