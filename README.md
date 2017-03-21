@@ -1,13 +1,9 @@
-# Maintainbox
+# Triage
 
-## Components
+## Overview
 
-- Repository
-- Workflow
-- Presenter
+List issues in a source code issue repository so that they can be triaged with
+labels.
 
-## MVP implementation
+## Usage
 
-- GithubIssuesRepository
-- TriageWorkflow
-- CLIPresenter
