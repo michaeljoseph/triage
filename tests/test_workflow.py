@@ -1,5 +1,5 @@
 from triage.workflow import TriageWorkflow
-from triage.repository import Repository
+from triage.repository.core import Repository
 from triage.exceptions import ConfigurationException
 from triage.issue import Issue
 
@@ -110,7 +110,7 @@ def issues_with_selected_actions():
 @pytest.yield_fixture
 def mock_repository_with_issues(mocker, issues):
     mock_repository = mocker.patch(
-        'triage.repository.Repository',
+        'triage.repository.core.Repository',
         autospec=True,
     )
     mock_repository.read_issues.return_value = issues
