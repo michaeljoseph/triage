@@ -1,7 +1,7 @@
 class Repository(object):
     issues = []
 
-    def search(self):
+    def read_issues(self, filters=None):
         return self.issues
 
     def update_issue(self, issue_id, labels):

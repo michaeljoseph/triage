@@ -1,0 +1,11 @@
+language: python
+python:
+  - "2.7"
+  - "3.4"
+  - "pypy"
+install:
+  - pip install -U -r requirements.txt
+script:
+  - py.test --cov triage --cov-report term-missing tests
+after_success:
+  - codecov
