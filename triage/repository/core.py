@@ -1,8 +1,20 @@
-from triage.exceptions import UnsupportedActionException
+from triage.exceptions import UnsupportedActionException, ConfigurationException
 
 
 class Repository(object):
     issues = []
+    config_schema = {}
+
+    def __init__(self, config=None):
+        self.config = config if config is not None else {}
+        self.validate_config()
+
+    def validate_config(self):
+        missing_keys = set(self.config_schema.keys()).difference(set(self.config.keys()))
+        if missing_keys:
+            raise ConfigurationException('Missing configuration key(s): {}'.format(
+                ','.join(sorted(missing_keys))
+            ))
 
     def read_issues(self, filters=None):
         return self.issues

@@ -1,5 +1,5 @@
 from triage.exceptions import UnsupportedActionException
-from triage.repository import Repository, camel_to_snake_case
+from triage.repository.core import Repository, camel_to_snake_case
 from triage.actions import LabelIssue, CloseIssue
 from triage.issue import Issue
 
