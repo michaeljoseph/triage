@@ -1,7 +1,9 @@
 import pytest
 
 from triage.exceptions import ConfigurationException
+from triage.issue import Issue
 from triage.repository.github import GithubRepository
+from triage.actions import LabelIssue
 
 
 def test_github_repository_demands_configuration():
@@ -47,8 +49,6 @@ def test_read_issues_requests_github_api(repository_config, mock_github_requests
     )
 
 
-def test_update_issue_requests_github_api(repository_config, mock_github_requests):
-    GithubRepository(repository_config).update_issue(issue_id='123', label='bug')
 def test_read_issues_with_filter_params(repository_config, mock_github_requests):
     filters = {
         'state': 'open',
@@ -61,7 +61,14 @@ def test_read_issues_with_filter_params(repository_config, mock_github_requests)
         headers={'Authorization': 'token foo'}
     )
 
+
+def test_handle_label_issue(repository_config, mock_github_requests):
+    issue = LabelIssue(Issue({'number': '123'}), label='bug')
+
+    GithubRepository(repository_config).handle_label_issue(issue)
+
     mock_github_requests.patch.assert_called_once_with(
         'https://api.github.com/repos/michaeljoseph/changes/issues/123',
+        json={'labels': ['bug']},
         headers={'Authorization': 'token foo'}
     )

@@ -50,43 +50,31 @@ def test_find_issues_calls_repository_search(mock_repository_with_issues):
     assert mock_repository_with_issues.read_issues.called
 
 
-## process_issues
-def test_update_issues_is_not_implemented(
-    workflow_with_issues,
-    issues_with_selected_actions
-):
-    with pytest.raises(NotImplementedError):
-        workflow_with_issues.process_issues(issues_with_selected_actions)
-
-
-def test_process_issues_applies_label(
-    mock_repository_with_issues,
-    issues_with_selected_actions
-):
-    workflow = TriageWorkflow(mock_repository_with_issues)
-
-    workflow.process_issues(issues_with_selected_actions)
-
-    assert mock_repository_with_issues.update_issue.called
-    mock_repository_with_issues.update_issue.assert_called_once_with(
-        123,
-        ['bug'],
-    )
-
-## process issues
-
-
 @pytest.fixture
 def issues():
     return [
         {
             'number': 123,
-            'title': 'Issue title',
             'description': 'A detailed description',
+            'title': 'An issue with no labels',
+            'body': 'A detailed description',
             'state': 'opened',
             'labels': [],
         }
     ]
+
+@pytest.fixture
+def issues_with_labels(issues):
+    return issues + [{
+        'number': 456,
+        'title': 'An issue with labels',
+        'body': 'A detailed description',
+        'state': 'opened',
+        'labels': [{
+           'id': 789,
+           'name': 'bug'
+        }],
+    }]
 
 
 @pytest.fixture

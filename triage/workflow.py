@@ -36,11 +36,6 @@ class TriageWorkflow(object):
             )
         return issues_and_actions
 
-    def process_issues(self, issue_actions):
-        for issue_action in issue_actions:
-            issue_id = issue_action['issue']['number']
-            label = issue_action['action']['value']
-            self.repository.update_issue(issue_id, [label])
     @staticmethod
     def filter_no_labels(issues):
         return [issue for issue in issues if issue['labels'] == []]

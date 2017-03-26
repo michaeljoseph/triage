@@ -19,9 +19,6 @@ class Repository(object):
     def read_issues(self, filters=None):
         return self.issues
 
-    def update_issue(self, issue_id, labels):
-        raise NotImplementedError
-
     def handle_action(self, action):
         method_name = camel_to_snake_case(
             type(action).__name__,
