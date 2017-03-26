@@ -6,7 +6,6 @@ from triage.issue import Issue
 import pytest
 
 
-## find_issues
 def test_unconfigured_workflow_raises():
     """TriageWorkflow needs a repository"""
     workflow = TriageWorkflow()
@@ -17,10 +16,19 @@ def test_unconfigured_workflow_raises():
 def test_issues_are_issue_instances(workflow_with_issues):
     issues = workflow_with_issues.find_issues()
 
-    assert len(issues) > 0
+    assert len(issues) == 1
 
     for issue, actions in issues:
         assert isinstance(issue, Issue)
+
+
+def test_find_issues_filters_out_labelled_issues(issues_with_labels):
+    repository = Repository()
+    repository.issues = issues_with_labels
+
+    issues = TriageWorkflow(repository).find_issues()
+
+    assert len(issues) == 1
 
 
 def test_issues_are_associated_with_actions(workflow_with_issues):
@@ -40,7 +48,6 @@ def test_find_issues_calls_repository_search(mock_repository_with_issues):
     workflow.find_issues()
 
     assert mock_repository_with_issues.read_issues.called
-## find_issues
 
 
 ## process_issues

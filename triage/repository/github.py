@@ -24,8 +24,10 @@ class GithubRepository(Repository):
     def read_issues(self, filters=None):
         return requests.get(
             READ_ISSUES.expand(self.config),
-            headers=self.headers
-        )
+            filters or {},
+            headers=self.headers,
+        ).json()
+
 
     def update_issue(self, issue_id, label):
         config = dict(**self.config)

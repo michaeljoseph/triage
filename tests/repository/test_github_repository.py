@@ -26,7 +26,7 @@ def repository_config():
 
 
 def test_configured_gh_repo(repository_config):
-    repo = GithubRepository(repository_config)
+    GithubRepository(repository_config)
 
 
 @pytest.fixture
@@ -42,12 +42,24 @@ def test_read_issues_requests_github_api(repository_config, mock_github_requests
 
     mock_github_requests.get.assert_called_once_with(
         'https://api.github.com/repos/michaeljoseph/changes/issues',
+        {},
         headers={'Authorization': 'token foo'}
     )
 
 
 def test_update_issue_requests_github_api(repository_config, mock_github_requests):
     GithubRepository(repository_config).update_issue(issue_id='123', label='bug')
+def test_read_issues_with_filter_params(repository_config, mock_github_requests):
+    filters = {
+        'state': 'open',
+    }
+    GithubRepository(repository_config).read_issues(filters)
+
+    mock_github_requests.get.assert_called_once_with(
+        'https://api.github.com/repos/michaeljoseph/changes/issues',
+        filters,
+        headers={'Authorization': 'token foo'}
+    )
 
     mock_github_requests.patch.assert_called_once_with(
         'https://api.github.com/repos/michaeljoseph/changes/issues/123',
