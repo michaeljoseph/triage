@@ -1,17 +1,10 @@
-class Issue(object):
-    def __init__(self, id, title, description, state, labels):
-        self.id = id
-        self.title = title
-        self.description = description
-        self.state = state
-        self.labels = labels
+ISSUE_FIELDS = ['number', 'title', 'body', 'state', 'labels']
 
-    @staticmethod
-    def from_dict(issue):
-        return Issue(
-            issue['id'],
-            issue['title'],
-            issue['description'],
-            issue['state'],
-            issue['labels'],
-        )
+
+class Issue(object):
+    def __init__(self, data=None):
+        data = data or {}
+        for key in ISSUE_FIELDS:
+            setattr(self, key, data.get(key))
+
+        self.data = data
