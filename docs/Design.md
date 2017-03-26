@@ -2,7 +2,7 @@
 
 [display issues]
 => app: list issues to triage
-=> workflow: list issues according to filters
+=> workflow: list issues according to (configured) filters
 => repository: query api with params
 <= repository: returns json
 <= workflow: converts to issue objects
@@ -19,7 +19,7 @@
         OR display the error message
 
 
-# Components
+# Components And Interactions
 
 - GithubIssuesRepository
     - (requires)
@@ -66,9 +66,5 @@
 + comments (number) - The number of comments
 
 
-boolean, string, number
-array, enum, object
-
 ## Action (object)
 + name: (string) - The name of the action
-
