@@ -73,7 +73,7 @@ def test_process_issues_applies_label(
 def issues():
     return [
         {
-            'id': 123,
+            'number': 123,
             'title': 'Issue title',
             'description': 'A detailed description',
             'state': 'opened',
@@ -97,7 +97,9 @@ def workflow_with_issues(repository_with_issues):
 @pytest.fixture
 def issues_with_selected_actions():
     return [{
-        'id': 123,
+        'issue': {
+            'number': 123,
+        },
         'action': {
             'name': 'Label',
             'value': 'bug'

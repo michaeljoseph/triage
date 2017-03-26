@@ -5,9 +5,9 @@ from .issue import Issue
 
 class TriageWorkflow(object):
     ACTIONS = [
-        actions.LabelIssue(),
-        actions.CloseIssue(),
-        actions.LabelAndCloseIssue(),
+        actions.LabelIssue,
+        actions.CloseIssue,
+        actions.LabelAndCloseIssue,
     ]
     FILTERS = {
         'state': 'open',
@@ -18,6 +18,10 @@ class TriageWorkflow(object):
         self.repository = repository
 
     def find_issues(self):
+        """List issues according to filters.
+
+        Associates issues with actions and return.
+        """
         if not self.repository:
             raise ConfigurationException()
 
@@ -27,12 +31,12 @@ class TriageWorkflow(object):
 
         for issue in issues:
             issues_and_actions.append(
-                (Issue.from_dict(issue), self.ACTIONS)
+                (Issue(issue), self.ACTIONS)
             )
         return issues_and_actions
 
     def process_issues(self, issue_actions):
         for issue_action in issue_actions:
-            issue_id = issue_action['id']
+            issue_id = issue_action['issue']['number']
             label = issue_action['action']['value']
             self.repository.update_issue(issue_id, [label])
