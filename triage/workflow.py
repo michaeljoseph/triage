@@ -5,9 +5,9 @@ from .issue import Issue
 
 class TriageWorkflow(object):
     ACTIONS = [
-        actions.LabelIssue(),
-        actions.CloseIssue(),
-        actions.LabelAndCloseIssue(),
+        actions.LabelIssue,
+        actions.CloseIssue,
+        actions.LabelAndCloseIssue,
     ]
     FILTERS = {
         'state': 'open',
