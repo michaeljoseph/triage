@@ -23,7 +23,7 @@ class TriageWorkflow(object):
         Associates issues with actions and return.
         """
         if not self.repository:
-            raise ConfigurationException()
+            raise ConfigurationException('Repository required')
 
         issues_and_actions = []
 
