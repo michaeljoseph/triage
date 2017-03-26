@@ -11,7 +11,6 @@ class TriageWorkflow(object):
     ]
     FILTERS = {
         'state': 'open',
-        'labels': [],
     }
 
     def __init__(self, repository=None):
@@ -23,11 +22,13 @@ class TriageWorkflow(object):
         Associates issues with actions and return.
         """
         if not self.repository:
-            raise ConfigurationException()
+            raise ConfigurationException('Repository required')
 
         issues_and_actions = []
 
-        issues = self.repository.read_issues(self.FILTERS)
+        issues = self.filter_no_labels(
+            self.repository.read_issues(self.FILTERS)
+        )
 
         for issue in issues:
             issues_and_actions.append(
@@ -35,8 +36,6 @@ class TriageWorkflow(object):
             )
         return issues_and_actions
 
-    def process_issues(self, issue_actions):
-        for issue_action in issue_actions:
-            issue_id = issue_action['issue']['number']
-            label = issue_action['action']['value']
-            self.repository.update_issue(issue_id, [label])
+    @staticmethod
+    def filter_no_labels(issues):
+        return [issue for issue in issues if issue['labels'] == []]

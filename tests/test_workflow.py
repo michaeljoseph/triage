@@ -1,12 +1,11 @@
 from triage.workflow import TriageWorkflow
-from triage.repository import Repository
+from triage.repository.core import Repository
 from triage.exceptions import ConfigurationException
 from triage.issue import Issue
 
 import pytest
 
 
-## find_issues
 def test_unconfigured_workflow_raises():
     """TriageWorkflow needs a repository"""
     workflow = TriageWorkflow()
@@ -17,10 +16,19 @@ def test_unconfigured_workflow_raises():
 def test_issues_are_issue_instances(workflow_with_issues):
     issues = workflow_with_issues.find_issues()
 
-    assert len(issues) > 0
+    assert len(issues) == 1
 
     for issue, actions in issues:
         assert isinstance(issue, Issue)
+
+
+def test_find_issues_filters_out_labelled_issues(issues_with_labels):
+    repository = Repository()
+    repository.issues = issues_with_labels
+
+    issues = TriageWorkflow(repository).find_issues()
+
+    assert len(issues) == 1
 
 
 def test_issues_are_associated_with_actions(workflow_with_issues):
@@ -40,33 +48,6 @@ def test_find_issues_calls_repository_search(mock_repository_with_issues):
     workflow.find_issues()
 
     assert mock_repository_with_issues.read_issues.called
-## find_issues
-
-
-## process_issues
-def test_update_issues_is_not_implemented(
-    workflow_with_issues,
-    issues_with_selected_actions
-):
-    with pytest.raises(NotImplementedError):
-        workflow_with_issues.process_issues(issues_with_selected_actions)
-
-
-def test_process_issues_applies_label(
-    mock_repository_with_issues,
-    issues_with_selected_actions
-):
-    workflow = TriageWorkflow(mock_repository_with_issues)
-
-    workflow.process_issues(issues_with_selected_actions)
-
-    assert mock_repository_with_issues.update_issue.called
-    mock_repository_with_issues.update_issue.assert_called_once_with(
-        123,
-        ['bug'],
-    )
-
-## process issues
 
 
 @pytest.fixture
@@ -74,12 +55,26 @@ def issues():
     return [
         {
             'number': 123,
-            'title': 'Issue title',
             'description': 'A detailed description',
+            'title': 'An issue with no labels',
+            'body': 'A detailed description',
             'state': 'opened',
             'labels': [],
         }
     ]
+
+@pytest.fixture
+def issues_with_labels(issues):
+    return issues + [{
+        'number': 456,
+        'title': 'An issue with labels',
+        'body': 'A detailed description',
+        'state': 'opened',
+        'labels': [{
+           'id': 789,
+           'name': 'bug'
+        }],
+    }]
 
 
 @pytest.fixture
@@ -110,7 +105,7 @@ def issues_with_selected_actions():
 @pytest.yield_fixture
 def mock_repository_with_issues(mocker, issues):
     mock_repository = mocker.patch(
-        'triage.repository.Repository',
+        'triage.repository.core.Repository',
         autospec=True,
     )
     mock_repository.read_issues.return_value = issues
