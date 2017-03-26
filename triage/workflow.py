@@ -37,6 +37,6 @@ class TriageWorkflow(object):
 
     def process_issues(self, issue_actions):
         for issue_action in issue_actions:
-            issue_id = issue_action['id']
+            issue_id = issue_action['issue']['number']
             label = issue_action['action']['value']
             self.repository.update_issue(issue_id, [label])
