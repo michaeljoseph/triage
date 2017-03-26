@@ -18,10 +18,20 @@ class Repository(object):
         if not self.supports_action(method_name):
             raise UnsupportedActionException()
 
+        action_handler = getattr(self, method_name)
+        return action_handler(action)
+
     def supports_action(self, method_name):
         return (
             hasattr(self, method_name) and
             callable(getattr(self, method_name))
+        )
+
+    def handle_label_issue(self, action):
+        issue_to_label = action.issue
+        label_name = action.label
+        return 'Adding label {} to issue {}'.format(
+            label_name, issue_to_label.number
         )
 
 
