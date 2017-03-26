@@ -18,6 +18,10 @@ class TriageWorkflow(object):
         self.repository = repository
 
     def find_issues(self):
+        """List issues according to filters.
+
+        Associates issues with actions and return.
+        """
         if not self.repository:
             raise ConfigurationException()
 
@@ -27,7 +31,7 @@ class TriageWorkflow(object):
 
         for issue in issues:
             issues_and_actions.append(
-                (Issue.from_dict(issue), self.ACTIONS)
+                (Issue(issue), self.ACTIONS)
             )
         return issues_and_actions
 
